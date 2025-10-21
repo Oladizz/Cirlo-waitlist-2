@@ -79,7 +79,7 @@ export const Hero: React.FC = () => {
           </h1>
           
           <p className="mt-6 text-4xl md:text-5xl text-gray-600 max-w-3xl">
-            Earn. borrow. Earn. All in your circle.
+            Earn. borrow. Lend. All in your circle.
           </p>
 
           <div className="mt-10 max-w-md md:mt-12">

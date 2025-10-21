@@ -10,7 +10,7 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, subtitleColor, showSpinner }) => (
-  <div className="bg-white p-6 rounded-2xl border border-gray-200/80">
+  <div className="bg-white p-4 rounded-2xl border border-gray-200/80">
     <p className="text-md text-gray-500">{title}</p>
     <p className="text-4xl font-bold text-gray-900 my-2">{value}</p>
     <p className={`text-sm font-semibold ${subtitleColor}`}>{subtitle}</p>
@@ -20,8 +20,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, subtitleCol
 
 export const BorrowerVolume: React.FC = () => {
     return (
-        <div className="bg-white p-8 rounded-3xl border border-gray-200/80 w-full h-full">
-            <div className="grid grid-cols-2 gap-6">
+        <div className="bg-white p-4 rounded-3xl border border-gray-200/80 w-full h-full">
+            <div className="grid grid-cols-2 gap-4">
                 <StatCard title="Total Volume" value="$2.44M" subtitle="Live updates" subtitleColor="text-green-500" showSpinner={true} />
                 <StatCard title="Active Loans" value="1,244" subtitle="Ongoing transactions" subtitleColor="text-blue-500" showSpinner={true} />
                 <StatCard title="Total Users" value="1,845" subtitle="Platform members" subtitleColor="text-purple-500" />

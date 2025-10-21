@@ -10,8 +10,8 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, subtitleColor, showSpinner }) => (
-  <div className="bg-white p-6 rounded-2xl border border-gray-200/80 relative">
-    {showSpinner && <div className="absolute top-6 right-6 w-5 h-5 rounded-full border-2 border-gray-200 opacity-80"></div>}
+  <div className="bg-white p-4 rounded-2xl border border-gray-200/80 relative">
+    {showSpinner && <div className="absolute top-4 right-4 w-5 h-5 rounded-full border-2 border-gray-200 opacity-80"></div>}
     <p className="text-md text-gray-500">{title}</p>
     <p className="text-4xl font-bold text-gray-900 my-2">{value}</p>
     <p className={`text-sm font-semibold ${subtitleColor}`}>{subtitle}</p>
@@ -31,7 +31,7 @@ const AnimatedBarChart: React.FC = () => {
     ];
 
     return (
-        <div className="h-40 flex items-end justify-between bg-white rounded-2xl p-4 border border-gray-200/80 mb-6">
+        <div className="h-20 flex items-end justify-between bg-white rounded-2xl p-4 border border-gray-200/80 mb-6">
             {bars.map((bar, index) => (
                 <div 
                     key={index} 
@@ -50,10 +50,10 @@ const AnimatedBarChart: React.FC = () => {
 
 export const LenderVolume: React.FC = () => {
     return (
-        <div className="bg-white p-8 rounded-3xl border border-gray-200/80 w-full h-full">
+        <div className="bg-white p-4 rounded-3xl border border-gray-200/80 w-full h-full">
             <AnimatedBarChart />
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
                 <StatCard title="Total Lenders" value="482" subtitle="+12 this week" subtitleColor="text-green-500" showSpinner={true} />
                 <StatCard title="Average Loan Size" value="$1,850" subtitle="Stable" subtitleColor="text-blue-500" showSpinner={true} />
                 <StatCard title="30-Day Volume" value="$480K" subtitle="+5.2%" subtitleColor="text-green-500" />
