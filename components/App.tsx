@@ -5,6 +5,7 @@ import { FeatureDisplay } from './FeatureDisplay';
 import { BorrowerVolume } from './BorrowerSearch';
 import { LenderVolume } from './LenderVolume';
 import { Footer } from '../Footer';
+import { WaitlistSection } from './WaitlistSection';
 
 const App: React.FC = () => {
   return (
@@ -67,6 +68,8 @@ const App: React.FC = () => {
             />
           </div>
         </FeatureDisplay>
+
+        <WaitlistSection />
 
       </main>
       <Footer />
