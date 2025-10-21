@@ -1,12 +1,10 @@
 import React from 'react';
 import { Header } from './Header';
 import { Hero } from './Hero';
-import { FeatureDisplay, CreateAndEarnCard } from './FeatureDisplay';
+import { FeatureDisplay } from './FeatureDisplay';
 import { BorrowerVolume } from './BorrowerSearch';
 import { LenderVolume } from './LenderVolume';
 import { Footer } from '../Footer';
-import { VerifiedProfileCard } from './VerifiedProfileCard';
-import { SocialFeed } from './SocialFeed';
 
 const App: React.FC = () => {
   return (
@@ -36,7 +34,11 @@ const App: React.FC = () => {
           description="Withdraw early, repay early, earn or access liquidity anytime."
         >
           <div className="w-full max-w-md">
-            <VerifiedProfileCard />
+            <img
+              src="https://i.postimg.cc/sxsNN0Q9/IMG-20251021-201612.jpg"
+              alt="Stylized representation of a social network for lending"
+              className="w-full h-auto object-cover rounded-3xl shadow-lg shadow-gray-200/50"
+            />
           </div>
         </FeatureDisplay>
 
@@ -45,7 +47,11 @@ const App: React.FC = () => {
           description="it’s the friendliest P2P money market in crypto, built for the next billion users who want financial access without financial anxiety."
         >
           <div className="w-full max-w-md">
-            <SocialFeed />
+            <img
+              src="https://i.postimg.cc/prR661hJ/Screenshot-2025-10-21-19-53-58-82.jpg"
+              alt="Abstract image representing global connectivity for lending"
+              className="w-full h-auto object-cover rounded-3xl shadow-lg shadow-gray-200/50"
+            />
           </div>
         </FeatureDisplay>
         
@@ -54,7 +60,11 @@ const App: React.FC = () => {
           description="Monitor your collateral in real-time."
         >
           <div className="w-full max-w-md">
-            <CreateAndEarnCard />
+            <img
+              src="https://i.postimg.cc/QChyyn9Q/Screenshot-2025-10-21-20-41-21-31.jpg"
+              alt="An abstract image symbolizing trust and security"
+              className="w-full h-auto object-cover rounded-3xl shadow-lg shadow-gray-200/50"
+            />
           </div>
         </FeatureDisplay>
 
