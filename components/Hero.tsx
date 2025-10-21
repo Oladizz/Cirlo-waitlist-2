@@ -74,8 +74,8 @@ export const Hero: React.FC = () => {
         <ScrollingGrid />
 
         <div className="text-left">
-          <h1 className="text-7xl md:text-9xl lg:text-[10rem] leading-tight font-extrabold tracking-tight text-gray-900">
-            A new social lending.
+          <h1 className="text-6xl md:text-8xl lg:text-9xl leading-tight font-extrabold tracking-tight text-gray-900">
+            The Social Way to Borrow and Lend Crypto
           </h1>
           
           <p className="mt-6 text-4xl md:text-5xl text-gray-600 max-w-3xl">
@@ -95,7 +95,7 @@ export const Hero: React.FC = () => {
                 />
                 <button 
                   type="submit" 
-                  className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 bg-brand-blue text-white font-bold py-3 px-6 rounded-md hover:bg-blue-600 transition-colors"
+                  className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Join the waitlist
                 </button>

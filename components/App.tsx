@@ -26,15 +26,16 @@ const App: React.FC = () => {
           title="Lender Volume"
           description="Track lender activity and platform liquidity."
           padding="py-4 md:py-6"
+          reverseOnDesktop={true}
         >
           <LenderVolume />
         </FeatureDisplay>
         
         <FeatureDisplay
-          title="A new social lending."
+          title="The Social Way to Borrow and Lend Crypto"
           description="Withdraw early, repay early, earn or access liquidity anytime."
         >
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mx-auto">
             <img
               src="https://i.postimg.cc/sxsNN0Q9/IMG-20251021-201612.jpg"
               alt="Stylized representation of a social network for lending"
@@ -46,8 +47,9 @@ const App: React.FC = () => {
         <FeatureDisplay
           title="Lend anyone anywhere."
           description="it’s the friendliest P2P money market in crypto, built for the next billion users who want financial access without financial anxiety."
+          reverseOnDesktop={true}
         >
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mx-auto">
             <img
               src="https://i.postimg.cc/prR661hJ/Screenshot-2025-10-21-19-53-58-82.jpg"
               alt="Abstract image representing global connectivity for lending"
@@ -60,7 +62,7 @@ const App: React.FC = () => {
           title="Trust and Transparency."
           description="Monitor your collateral in real-time."
         >
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mx-auto">
             <img
               src="https://i.postimg.cc/QChyyn9Q/Screenshot-2025-10-21-20-41-21-31.jpg"
               alt="An abstract image symbolizing trust and security"

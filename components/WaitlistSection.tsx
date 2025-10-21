@@ -24,7 +24,7 @@ export const WaitlistSection: React.FC = () => {
                   <button
           
                     type="submit"
-                    className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 bg-brand-blue text-white font-bold py-3 px-6 rounded-md hover:bg-blue-600 transition-colors"
+                    className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 bg-gray-900 text-white font-bold py-3 px-6 rounded-md hover:bg-gray-700 transition-colors"
                
                
                   >
