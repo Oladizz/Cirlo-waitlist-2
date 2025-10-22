@@ -73,16 +73,16 @@ export const Hero: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollingGrid />
 
-        <div className="text-left">
+        <div className="text-center">
           <h1 className="text-6xl md:text-8xl lg:text-9xl leading-tight font-extrabold tracking-tight text-gray-900">
             The Social Way to Borrow and Lend Crypto
           </h1>
           
-          <p className="mt-6 text-4xl md:text-5xl text-gray-600 max-w-3xl">
+          <p className="mt-6 text-4xl md:text-5xl text-gray-600 max-w-3xl mx-auto">
             Earn. borrow. Lend. All in your circle.
           </p>
 
-          <div className="mt-10 max-w-md md:mt-12">
+          <div className="mt-10 max-w-md md:mt-12 mx-auto">
             <div className="rounded-md w-full">
               <form className="sm:flex">
                 <input 
