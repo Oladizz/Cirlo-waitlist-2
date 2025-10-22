@@ -10,7 +10,7 @@ interface FeatureDisplayProps {
 
 export const FeatureDisplay: React.FC<FeatureDisplayProps> = ({ title, description, children, padding = 'py-16 md:py-20', reverseOnDesktop = false }) => {
   return (
-    <section className={`${padding} bg-gray-50`}>
+    <section className={`${padding} bg-white`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-24 items-center">
           <div className={`w-full ${reverseOnDesktop ? 'lg:order-last' : ''}`}>
