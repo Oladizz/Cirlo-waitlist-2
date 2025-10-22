@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
     <footer className="bg-white border-t border-gray-200">
       <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center space-y-4">
-          <img src="https://i.postimg.cc/V64Vsm3z/Logo-COLORED-IN-WHITE.png" alt="Cirlo Logo" className="h-10 w-auto" />
+          <img src="https://i.postimg.cc/mkG3YBb9/Logo-COLORED.png" alt="Cirlo Logo" className="h-10 w-auto" />
           <p className="text-center text-gray-500">
             Built on Base
           </p>

@@ -35,7 +35,7 @@ const AnimatedBarChart: React.FC = () => {
             {bars.map((bar, index) => (
                 <div 
                     key={index} 
-                    className="w-8 bg-brand-blue rounded-t-md" 
+                    className="w-8 bg-black rounded-t-md" 
                     style={{ 
                         height: bar.height, 
                         animation: `pulse-bar 1.5s infinite alternate`,

@@ -33,7 +33,7 @@ export const WaitlistSection: React.FC = () => {
             </div>
           </div>
           <p className="mt-4 text-lg text-gray-500">
-            Your information is safe with us.
+            sign up to receive product updates.
           </p>
         </div>
       </div>

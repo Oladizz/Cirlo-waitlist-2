@@ -2,7 +2,7 @@ import React from 'react';
 
 const CirloLogo = () => (
   <div className="bg-white/60 backdrop-blur-md border border-gray-200/50 rounded-xl p-2">
-    <img src="https://i.postimg.cc/V64Vsm3z/Logo-COLORED-IN-WHITE.png" alt="Cirlo Logo" className="h-8 w-auto" />
+    <img src="https://i.postimg.cc/mkG3YBb9/Logo-COLORED.png" alt="Cirlo Logo" className="h-8 w-auto" />
   </div>
 );
 
