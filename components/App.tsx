@@ -32,7 +32,7 @@ const App: React.FC = () => {
         </FeatureDisplay>
         
         <FeatureDisplay
-          title="The Social Way to Borrow and Lend Crypto"
+          title="A new social lending."
           description="Withdraw early, repay early, earn or access liquidity anytime."
         >
           <div className="w-full max-w-md mx-auto">
