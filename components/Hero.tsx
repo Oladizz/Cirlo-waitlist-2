@@ -90,7 +90,7 @@ export const Hero: React.FC = () => {
                   name="email" 
                   id="email"
                   required
-                  className="w-full px-5 py-3 border border-gray-300 bg-white rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue" 
+                  className="w-full px-5 py-3 border border-gray-300 bg-white rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black" 
                   placeholder="Enter your email"
                 />
                 <button 

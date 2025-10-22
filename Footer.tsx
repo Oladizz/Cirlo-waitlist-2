@@ -6,9 +6,9 @@ const TwitterIcon = () => (
     </svg>
 );
 
-const LinkedInIcon = () => (
+const TelegramIcon = () => (
     <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+        <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-1.39.2-1.61l15.35-5.85c.73-.28 1.45.18 1.18 1.81l-2.53 12.08c-.24 1.15-1.01 1.44-1.9 1.01l-4.2-3.13-2.02 1.95c-.21.21-.4.32-.69.32h0z"/>
     </svg>
 );
 
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
     <footer className="bg-white border-t border-gray-200">
       <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center space-y-4">
-          <img src="https://i.postimg.cc/mkG3YBb9/Logo-COLORED.png" alt="Cirlo Logo" className="h-10 w-auto" />
+          <img src="https://i.postimg.cc/X71G34TL/Logo-Mark-BLACK.png" alt="Cirlo Logo" className="h-6 w-auto" />
           <p className="text-center text-gray-500">
             Built on Base
           </p>
@@ -34,8 +34,8 @@ export const Footer: React.FC = () => {
               <TwitterIcon />
             </a>
             <a href="#" className="text-gray-400 hover:text-gray-500 transition-colors">
-              <span className="sr-only">LinkedIn</span>
-              <LinkedInIcon />
+              <span className="sr-only">Telegram</span>
+              <TelegramIcon />
             </a>
             <a href="#" className="text-gray-400 hover:text-gray-500 transition-colors">
               <span className="sr-only">Discord</span>
