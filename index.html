@@ -56,6 +56,20 @@
       .animate-scroll-right {
         animation: scroll-right 60s linear infinite;
       }
+      @keyframes scroll-up {
+        from { transform: translateY(100%); }
+        to { transform: translateY(-100%); }
+      }
+      .animate-scroll-up {
+        animation: scroll-up 40s linear infinite;
+      }
+      @keyframes scroll-down {
+        from { transform: translateY(-100%); }
+        to { transform: translateY(100%); }
+      }
+      .animate-scroll-down {
+        animation: scroll-down 40s linear infinite;
+      }
     </style>
   <script type="importmap">
 {

@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { db } from '../firebase'; // Adjust the import path as needed
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // A single item in the scrolling grid, can be text or an image
 const GridItem: React.FC<{ item: { type: 'text' | 'image'; value: string } }> = ({ item }) => {
@@ -19,9 +22,23 @@ const GridItem: React.FC<{ item: { type: 'text' | 'image'; value: string } }> = 
 };
 
 // A row in the scrolling grid
-const GridRow: React.FC<{ items: { type: 'text' | 'image'; value: string }[]; direction: 'left' | 'right' }> = ({ items, direction }) => {
+const GridRow: React.FC<{ items: { type: 'text' | 'image'; value: string }[]; direction: 'left' | 'right' | 'up' | 'down' }> = ({ items, direction }) => {
   const repeatedItems = [...items, ...items]; // Duplicate for seamless animation
-  const animationClass = direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right';
+  let animationClass = '';
+  switch (direction) {
+    case 'left':
+      animationClass = 'animate-scroll-left';
+      break;
+    case 'right':
+      animationClass = 'animate-scroll-right';
+      break;
+    case 'up':
+      animationClass = 'animate-scroll-up';
+      break;
+    case 'down':
+      animationClass = 'animate-scroll-down';
+      break;
+  }
 
   return (
     <div className={animationClass}>
@@ -59,15 +76,41 @@ const ScrollingGrid = () => {
 
   return (
     <div className="mb-12 h-72 md:h-96 relative overflow-hidden flex flex-col justify-around space-y-4">
-      <GridRow items={row1Items} direction="left" />
-      <GridRow items={row2Items} direction="right" />
-      <GridRow items={row3Items} direction="left" />
+      <GridRow items={row1Items} direction="up" />
+      <GridRow items={row2Items} direction="down" />
+      <GridRow items={row3Items} direction="up" />
     </div>
   );
 };
 
 
 export const Hero: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    setLoading(true);
+
+    try {
+      await addDoc(collection(db, 'waitlist'), {
+        email: email,
+        timestamp: serverTimestamp(),
+      });
+      toast.success('Successfully joined the waitlist!');
+      setEmail('');
+    } catch (error) {
+      console.error('FIREBASE_ERROR: ', error);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="pt-0 pb-20 md:pb-24 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -84,7 +127,7 @@ export const Hero: React.FC = () => {
 
           <div className="mt-10 max-w-md md:mt-12 mx-auto">
             <div className="rounded-md w-full">
-              <form className="sm:flex">
+              <form onSubmit={handleSubmit} className="sm:flex">
                 <input 
                   type="email" 
                   name="email" 
@@ -92,12 +135,16 @@ export const Hero: React.FC = () => {
                   required
                   className="w-full px-5 py-3 border border-gray-300 bg-white rounded-md text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black" 
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                 />
                 <button 
                   type="submit" 
                   className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition-colors"
+                  disabled={loading}
                 >
-                  Join the waitlist
+                  {loading ? 'Joining...' : 'Join the waitlist'}
                 </button>
               </form>
             </div>
