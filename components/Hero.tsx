@@ -76,9 +76,9 @@ const ScrollingGrid = () => {
 
   return (
     <div className="mb-12 h-72 md:h-96 relative overflow-hidden flex flex-col justify-around space-y-4">
-      <GridRow items={row1Items} direction="up" />
-      <GridRow items={row2Items} direction="down" />
-      <GridRow items={row3Items} direction="up" />
+      <GridRow items={row1Items} direction="left" />
+      <GridRow items={row2Items} direction="right" />
+      <GridRow items={row3Items} direction="left" />
     </div>
   );
 };
