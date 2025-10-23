@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { db } from '../firebase'; // Adjust the import path as needed
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -23,12 +24,14 @@ export const WaitlistSection: React.FC = () => {
         email: email,
         timestamp: serverTimestamp(),
       });
-      setMessage('Thank you for joining the waitlist!');
+      setMessage(`Thank you for joining the waitlist, ${email}!`);
+      toast.success('Successfully joined the waitlist!');
       setEmail('');
       console.log("Document added successfully.");
     } catch (error) {
       console.error('FIREBASE_ERROR: ', error);
       setMessage('Something went wrong. Please try again.');
+      toast.error('Failed to join the waitlist.');
     } finally {
       setLoading(false);
     }

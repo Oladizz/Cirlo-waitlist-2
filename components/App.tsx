@@ -9,6 +9,8 @@ import { Footer } from '../Footer';
 import { WaitlistSection } from './WaitlistSection';
 import { AdminPage } from './AdminPage';
 import { ProtectedRoute } from './ProtectedRoute';
+import { LoginPage } from './LoginPage';
+import { Toaster } from 'react-hot-toast';
 
 const HomePage: React.FC = () => (
   <>
@@ -72,11 +74,13 @@ const HomePage: React.FC = () => (
 const App: React.FC = () => {
   return (
     <Router>
+      <Toaster />
       <div className="bg-white text-gray-800 font-sans overflow-x-hidden">
         <Header />
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route
               path="/admin"
               element={
