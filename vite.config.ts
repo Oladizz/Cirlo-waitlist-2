@@ -7,8 +7,11 @@ export default defineConfig(({ mode }) => {
     return {
       appType: 'spa',
       server: {
-        port: 3000,
+        port: 3002,
         host: '0.0.0.0',
+        proxy: {
+          '/send-waitlist-email': 'http://localhost:3003',
+        },
       },
       plugins: [react()],
       define: {

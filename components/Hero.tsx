@@ -97,14 +97,32 @@ export const Hero: React.FC = () => {
     setLoading(true);
 
     try {
+      // 1. Add to Firebase
       await addDoc(collection(db, 'waitlist'), {
         email: email,
         timestamp: serverTimestamp(),
       });
-      toast.success('Successfully joined the waitlist!');
-      setEmail('');
+
+      // 2. Call backend to send email
+      const response = await fetch('/send-waitlist-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipientEmail: email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || 'Successfully joined the waitlist and email sent!');
+        setEmail('');
+      } else {
+        toast.error(data.message || 'Failed to send email. Please try again.');
+      }
+
     } catch (error) {
-      console.error('FIREBASE_ERROR: ', error);
+      console.error('Error joining waitlist or sending email: ', error);
       toast.error('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
