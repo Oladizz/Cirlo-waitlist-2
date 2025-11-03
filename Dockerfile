@@ -19,9 +19,6 @@ RUN npm run build
 # Now handle the backend
 WORKDIR /app/backend
 
-# Copy backend package.json and package-lock.json
-COPY package.json package-lock.json ./
-
 # Install backend dependencies
 RUN npm install
 
