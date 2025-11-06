@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 let apiKey = apiInstance.apiClient.authentications['api-key'];
 apiKey.apiKey = process.env.BREVO_API_KEY;
+console.log('Brevo API Key:', process.env.BREVO_API_KEY);
 
 // Function to read email template
 const getEmailTemplate = (templateName) => {
