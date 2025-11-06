@@ -1,6 +1,6 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const express = require('express');
-const nodemailer = require('nodemailer');
+const SibApiV3Sdk = require('@getbrevo/brevo');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,16 +16,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Nodemailer transporter setup
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address
-        pass: process.env.EMAIL_PASS  // Your Gmail app password
-    }
-});
+// Brevo API setup
+let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+let apiKey = apiInstance.apiClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
 // Function to read email template
 const getEmailTemplate = (templateName) => {
@@ -42,17 +36,16 @@ app.post('/send-waitlist-email', async (req, res) => {
     }
 
     try {
-        const emailContent = getEmailTemplate('waitlist_welcome'); // Use a default template
+        const emailContent = getEmailTemplate('waitlist_welcome');
         const personalizedContent = emailContent.replace('{{name}}', name || 'there');
 
-        const mailOptions = {
-            from: 'Cirlo <' + process.env.EMAIL_USER + '>',
-            to: recipientEmail,
-            subject: 'Welcome to the Waitlist!',
-            html: personalizedContent
-        };
+        const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+        sendSmtpEmail.to = [{ email: recipientEmail, name: name }];
+        sendSmtpEmail.sender = { email: 'noreply@cirlo.com', name: 'Cirlo' };
+        sendSmtpEmail.subject = 'Welcome to the Waitlist!';
+        sendSmtpEmail.htmlContent = personalizedContent;
 
-        await transporter.sendMail(mailOptions);
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
         res.status(200).json({ message: 'Email sent successfully!' });
     } catch (error) {
         console.error('Error sending email:', error);
