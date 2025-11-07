@@ -42,7 +42,7 @@ app.post('/send-waitlist-email', async (req, res) => {
 
         const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
         sendSmtpEmail.to = [{ email: recipientEmail, name: name }];
-        sendSmtpEmail.sender = { email: 'noreply@cirlo.com', name: 'Cirlo' };
+                sendSmtpEmail.sender = { email: 'cirlo.xyz@gmail.com', name: 'Cirlo' };
         sendSmtpEmail.subject = 'Welcome to the Waitlist!';
         sendSmtpEmail.htmlContent = personalizedContent;
 
