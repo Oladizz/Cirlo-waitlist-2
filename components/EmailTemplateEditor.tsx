@@ -1,45 +1,22 @@
-require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
-const express = require('express');
-const SibApiV3Sdk = require('@getbrevo/brevo');
-const admin = require('firebase-admin');
-const path = require('path');
+import React, { useEffect, useState } from 'react';
+import { db } from '../firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
-// Initialize Firebase Admin SDK
-// IMPORTANT: Replace with your actual service account key path or environment variable
-// For production, consider using GOOGLE_APPLICATION_CREDENTIALS environment variable
-admin.initializeApp({
-  credential: admin.credential.applicationDefault()
-});
+export const EmailTemplateEditor: React.FC = () => {
+  const [emailTemplateContent, setEmailTemplateContent] = useState('');
+  const [emailTemplateLoading, setEmailTemplateLoading] = useState(true);
+  const navigate = useNavigate();
 
-const db = admin.firestore();
-
-const app = express();
-const port = process.env.PORT || 3003;
-
-app.use(express.json());
-
-// CORS for frontend
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Adjust in production
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
-
-// Brevo API setup
-let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-let apiKey = apiInstance.apiClient.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY;
-console.log('Brevo API Key:', process.env.BREVO_API_KEY);
-
-// Function to get email template from Firestore
-const getEmailTemplate = async () => {
-    const docRef = db.collection('settings').doc('emailTemplate');
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-        return docSnap.data().content;
-    } else {
-        // Default template if not found in Firestore
-        return `
+  const fetchEmailTemplate = async () => {
+    try {
+      const docRef = doc(db, 'settings', 'emailTemplate');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setEmailTemplateContent(docSnap.data().content);
+      } else {
+        // Set a default template if none exists
+        setEmailTemplateContent(`
           <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -208,44 +185,76 @@ const getEmailTemplate = async () => {
 
 </body>
 </html>
-        `;
-    }
-};
-
-app.post('/send-waitlist-email', async (req, res) => {
-    const { recipientEmail, name } = req.body;
-    console.log('Received request body:', req.body);
-
-    if (!recipientEmail) {
-        return res.status(400).json({ message: 'Recipient email is required.' });
-    }
-
-    try {
-        const emailContent = await getEmailTemplate();
-        const personalizedContent = emailContent.replace('{{name}}', name || 'there');
-
-        const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-        sendSmtpEmail.to = [{ email: recipientEmail, name: name }];
-        sendSmtpEmail.sender = { email: 'cirlo.xyz@gmail.com', name: 'Cirlo' };
-        sendSmtpEmail.subject = 'Welcome to the Waitlist!';
-        sendSmtpEmail.htmlContent = personalizedContent;
-
-        await apiInstance.sendTransacEmail(sendSmtpEmail);
-        res.status(200).json({ message: 'Email sent successfully!' });
+        `);
+      }
     } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send email.', error: error.message });
+      console.error("Error fetching email template: ", error);
+    } finally {
+      setEmailTemplateLoading(false);
     }
-});
+  };
 
-// Serve static files from the frontend build directory
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+  useEffect(() => {
+    fetchEmailTemplate();
+  }, []);
 
-// All other GET requests not handled by the API should return the frontend's index.html
-app.get(/^\/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-});
+  const handleSaveEmailTemplate = async () => {
+    setEmailTemplateLoading(true);
+    try {
+      await updateDoc(doc(db, 'settings', 'emailTemplate'), {
+        content: emailTemplateContent,
+      });
+      alert('Email template saved successfully!');
+    } catch (error) {
+      console.error('Error saving email template: ', error);
+      alert('Failed to save email template.');
+    } finally {
+      setEmailTemplateLoading(false);
+    }
+  };
 
-app.listen(port, () => {
-    console.log(`Backend server listening at http://localhost:${port}`);
-});
+  if (emailTemplateLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Edit Email Template</h1>
+        <button
+          onClick={() => navigate('/admin')}
+          className="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700"
+        >
+          Back to Admin
+        </button>
+      </div>
+
+      <div className="mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:order-last">
+            <h3 className="text-lg font-bold mb-2">HTML Code Editor</h3>
+            <textarea
+              className="w-full p-2 border rounded-md h-96 font-mono text-sm"
+              value={emailTemplateContent}
+              onChange={(e) => setEmailTemplateContent(e.target.value)}
+            ></textarea>
+            <button
+              onClick={handleSaveEmailTemplate}
+              className="mt-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 mr-2"
+              disabled={emailTemplateLoading}
+            >
+              {emailTemplateLoading ? 'Saving...' : 'Save Template'}
+            </button>
+          </div>
+          <div className="md:order-first">
+            <h3 className="text-lg font-bold mb-2">Live Preview</h3>
+            <div
+              className="w-full p-2 border rounded-md bg-gray-50 h-96 overflow-auto"
+              dangerouslySetInnerHTML={{ __html: emailTemplateContent }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

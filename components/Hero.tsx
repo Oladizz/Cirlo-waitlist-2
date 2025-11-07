@@ -102,7 +102,7 @@ export const Hero: React.FC = () => {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        toast.error('This email is already on the waitlist.');
+        toast.error('This email is already on the waitlist. Please use a different email or contact support if you believe this is an error.');
         setLoading(false);
         return;
       }
@@ -113,7 +113,7 @@ export const Hero: React.FC = () => {
         timestamp: serverTimestamp(),
       });
 
-      // 2. Call backend to send email
+      // 3. Call backend to send email
       const response = await fetch('/send-waitlist-email', {
         method: 'POST',
         headers: {

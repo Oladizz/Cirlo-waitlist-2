@@ -26,8 +26,7 @@ export const WaitlistSection: React.FC = () => {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        setMessage('This email is already on the waitlist.');
-        toast.error('This email is already on the waitlist.');
+        toast.error('This email is already on the waitlist. Please use a different email or contact support if you believe this is an error.');
         setLoading(false);
         return;
       }

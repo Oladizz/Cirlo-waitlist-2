@@ -10,6 +10,7 @@ import { WaitlistSection } from './WaitlistSection';
 import { AdminPage } from './AdminPage';
 import { ProtectedRoute } from './ProtectedRoute';
 import { LoginPage } from './LoginPage';
+import { EmailTemplateEditor } from './EmailTemplateEditor'; // Import the new component
 import { Toaster } from 'react-hot-toast';
 
 const HomePage: React.FC = () => (
@@ -86,6 +87,14 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/email-template"
+              element={
+                <ProtectedRoute>
+                  <EmailTemplateEditor />
                 </ProtectedRoute>
               }
             />
