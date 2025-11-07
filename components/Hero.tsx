@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { db } from '../firebase'; // Adjust the import path as needed
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 
 // A single item in the scrolling grid, can be text or an image
 const GridItem: React.FC<{ item: { type: 'text' | 'image'; value: string } }> = ({ item }) => {
@@ -87,6 +87,34 @@ const ScrollingGrid = () => {
 export const Hero: React.FC = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailTemplate, setEmailTemplate] = useState('');
+
+  useEffect(() => {
+    const fetchEmailTemplate = async () => {
+      try {
+        const docRef = doc(db, 'settings', 'emailTemplate');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setEmailTemplate(docSnap.data().content);
+        } else {
+          // Fallback to a default template if not found in Firestore
+          setEmailTemplate(`
+            <p>Hello {{name}},</p>
+            <p>Thank you for joining our waitlist! We are very excited to have you.</p>
+            <p>We'll notify you as soon as we have more updates or when our service is ready.</p>
+            <p>In the meantime, feel free to visit our website:</p>
+            <p><a href="https://www.example.com" class="button">Visit Our Website</a></p>
+            <p>Best regards,</p>
+            <p>The Cirlo Team</p>
+          `);
+        }
+      } catch (error) {
+        console.error("Error fetching email template: ", error);
+        toast.error("Failed to load email template.");
+      }
+    };
+    fetchEmailTemplate();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,7 +147,7 @@ export const Hero: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ recipientEmail: email }),
+        body: JSON.stringify({ recipientEmail: email, htmlContent: emailTemplate }),
       });
 
       const data = await response.json();

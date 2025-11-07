@@ -1,18 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { db } from '../firebase'; // Adjust the import path as needed
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export const WaitlistSection: React.FC = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailTemplate, setEmailTemplate] = useState('');
+
+  useEffect(() => {
+    const fetchEmailTemplate = async () => {
+      try {
+        const docRef = doc(db, 'settings', 'emailTemplate');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setEmailTemplate(docSnap.data().content);
+        } else {
+          // Fallback to a default template if not found in Firestore
+          setEmailTemplate(`
+            <p>Hello {{name}},</p>
+            <p>Thank you for joining our waitlist! We are very excited to have you.</p>
+            <p>We'll notify you as soon as we have more updates or when our service is ready.</p>
+            <p>In the meantime, feel free to visit our website:</p>
+            <p><a href="https://www.example.com" class="button">Visit Our Website</a></p>
+            <p>Best regards,</p>
+            <p>The Cirlo Team</p>
+          `);
+        }
+      } catch (error) {
+        console.error("Error fetching email template: ", error);
+        toast.error("Failed to load email template.");
+      }
+    };
+    fetchEmailTemplate();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted');
     if (!email) {
-      setMessage('Please enter a valid email address.');
+      toast.error('Please enter a valid email address.');
       return;
     }
     setLoading(true);
@@ -39,6 +67,22 @@ export const WaitlistSection: React.FC = () => {
       toast.success('Successfully joined the waitlist!');
       setEmail('');
       console.log("Document added successfully.");
+
+      // Call backend to send email
+      const response = await fetch('/send-waitlist-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipientEmail: email, htmlContent: emailTemplate }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.message || 'Failed to send email. Please try again.');
+      }
+
     } catch (error) {
       console.error('FIREBASE_ERROR: ', error);
       setMessage('Something went wrong. Please try again.');
