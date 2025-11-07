@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { db } from '../firebase'; // Adjust the import path as needed
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 export const WaitlistSection: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,6 +20,18 @@ export const WaitlistSection: React.FC = () => {
 
     try {
       console.log("Attempting to add document for email:", email);
+
+      // Check for duplicate email
+      const q = query(collection(db, 'waitlist'), where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setMessage('This email is already on the waitlist.');
+        toast.error('This email is already on the waitlist.');
+        setLoading(false);
+        return;
+      }
+
       await addDoc(collection(db, 'waitlist'), {
         email: email,
         timestamp: serverTimestamp(),

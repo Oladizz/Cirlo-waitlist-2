@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { db } from '../firebase'; // Adjust the import path as needed
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 // A single item in the scrolling grid, can be text or an image
 const GridItem: React.FC<{ item: { type: 'text' | 'image'; value: string } }> = ({ item }) => {
@@ -97,7 +97,17 @@ export const Hero: React.FC = () => {
     setLoading(true);
 
     try {
-      // 1. Add to Firebase
+      // 1. Check for duplicate email in Firebase
+      const q = query(collection(db, 'waitlist'), where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        toast.error('This email is already on the waitlist.');
+        setLoading(false);
+        return;
+      }
+
+      // 2. Add to Firebase
       await addDoc(collection(db, 'waitlist'), {
         email: email,
         timestamp: serverTimestamp(),

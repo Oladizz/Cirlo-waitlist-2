@@ -1,8 +1,16 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const express = require('express');
 const SibApiV3Sdk = require('@getbrevo/brevo');
-const fs = require('fs');
-const path = require('path');
+const admin = require('firebase-admin');
+
+// Initialize Firebase Admin SDK
+// IMPORTANT: Replace with your actual service account key path or environment variable
+// For production, consider using GOOGLE_APPLICATION_CREDENTIALS environment variable
+admin.initializeApp({
+  credential: admin.credential.applicationDefault()
+});
+
+const db = admin.firestore();
 
 const app = express();
 const port = process.env.PORT || 3003;
@@ -22,10 +30,24 @@ let apiKey = apiInstance.apiClient.authentications['api-key'];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 console.log('Brevo API Key:', process.env.BREVO_API_KEY);
 
-// Function to read email template
-const getEmailTemplate = (templateName) => {
-    const templatePath = path.join(__dirname, 'email_templates', `${templateName}.html`);
-    return fs.readFileSync(templatePath, 'utf8');
+// Function to get email template from Firestore
+const getEmailTemplate = async () => {
+    const docRef = db.collection('settings').doc('emailTemplate');
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
+        return docSnap.data().content;
+    } else {
+        // Default template if not found in Firestore
+        return `
+          <p>Hello {{name}},</p>
+          <p>Thank you for joining our waitlist! We are very excited to have you.</p>
+          <p>We'll notify you as soon as we have more updates or when our service is ready.</p>
+          <p>In the meantime, feel free to visit our website:</p>
+          <p><a href="https://www.example.com" class="button">Visit Our Website</a></p>
+          <p>Best regards,</p>
+          <p>The Cirlo Team</p>
+        `;
+    }
 };
 
 app.post('/send-waitlist-email', async (req, res) => {
@@ -37,12 +59,12 @@ app.post('/send-waitlist-email', async (req, res) => {
     }
 
     try {
-        const emailContent = getEmailTemplate('waitlist_welcome');
+        const emailContent = await getEmailTemplate();
         const personalizedContent = emailContent.replace('{{name}}', name || 'there');
 
         const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
         sendSmtpEmail.to = [{ email: recipientEmail, name: name }];
-                sendSmtpEmail.sender = { email: 'cirlo.xyz@gmail.com', name: 'Cirlo' };
+        sendSmtpEmail.sender = { email: 'cirlo.xyz@gmail.com', name: 'Cirlo' };
         sendSmtpEmail.subject = 'Welcome to the Waitlist!';
         sendSmtpEmail.htmlContent = personalizedContent;
 
